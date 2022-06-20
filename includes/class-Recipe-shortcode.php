@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     /**
 	* Class .
 	*/
-	class Recipe_shortcode {
+class Recipe_shortcode 
+{
     /**
     *  Constructor.
     */
@@ -25,12 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     {
         
     $curentpage = get_query_var('paged');
+    
     $args = array(
-                    'post_type'      => 'recipe',
-                    'posts_per_page' => '-1',
-                    'publish_status' => 'published',
-                    'paged' => $curentpage
-                 );
+    'post_type'      => 'recipe',
+    'posts_per_page' => '-1',
+    'publish_status' => 'published',
+    'paged' => $curentpage
+
+     );
 
     $query = new WP_Query($args);
 
@@ -55,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     return $result;
             
    }
- }
+}
 
 new Recipe_shortcode();
 

@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
         var fetch = $(this).val();
        
         jQuery.ajax({
-            url:   frontend_ajax_object.ajaxurl,
+            url:   front_ajax_object.ajaxurl,
             type: 'post',
             data:  { 
             action: 'data_fetch',  
@@ -28,7 +28,7 @@ jQuery(document).ready(function($){
         var keyword = $(this).val();
         console.log(keyword)
         jQuery.ajax({
-            url:   frontend_ajax_object.ajaxurl,
+            url:   front_ajax_object.ajaxurl,
             type: 'POST',
             data: { 
                 action: 'filter',  
@@ -44,5 +44,3 @@ jQuery(document).ready(function($){
     
     
   });
-    
-    
