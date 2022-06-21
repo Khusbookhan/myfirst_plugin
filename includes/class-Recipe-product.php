@@ -17,25 +17,15 @@ class Recipe_productpage
     public function __construct()
 
     {
-       
-            //adding field
-
-            //saving value at backend
-        add_action( 'woocommerce_process_product_meta',array($this,'woofiled_save_woocom_field' ));
+        //saving texfield and checkbox values 
+        add_action( 'woocommerce_process_product_meta',  array($this, 'textfield_value_saving')); 
        
           //showing value to add to cart
         add_filter( 'woocommerce_get_price_html', array($this, 'showing_discount_singleproduct' ));
            
             //checbox add
-        add_action('woocommerce_product_options_general_product_data',array($this, 'woocommerce_product_discount'));
-           //for price changing
-        //add_filter( 'woocommerce_get_price_html',array($this, 'simple_product_price_html' ));
-       
-        //showing secure money
-        add_action( 'woocommerce_cart_totals_after_order_total',array($this,'showing_discount_cart'));
-        add_action( 'woocommerce_review_order_after_order_total',array($this, 'showing_discount_cart'));
-         
-  
+        add_action('woocommerce_product_options_general_product_data',array($this, 'Adding_checkbox_and_field'));
+           
         //showing regular and sale price
         add_action( 'woocommerce_before_calculate_totals', array( $this, 'cart_price_update' ) );
        
@@ -43,14 +33,33 @@ class Recipe_productpage
        
 
     }
-       
-       
-        //adding checkox
+      
+      /**
+    * Saving value of discount field in database 
+    */
+    public function textfield_value_saving( $post_id )
+    {
+          $discount = isset( $_POST['woocom_text_field_title'] ) ? $_POST['woocom_text_field_title'] : '';
+          $checkbox = isset( $_POST['checkbox_discount'] ) ? $_POST['checkbox_discount'] : '';
+          if( $discount ) {
+            if( $discount > 0 && $discount < 100) {
+              update_post_meta( $post_id, "woocom_text_field_title", $discount  );
+              update_post_meta( $post_id, "checkbox_discount", $checkbox  );
+            }
+          }
+          
+    }
+      
 
-    public function woocommerce_product_discount ()
-        {
+       
+         /**
+    * Adding checkbox and field
+    */
+
+    public function Adding_checkbox_and_field ()
+    {
             global $woocommerce;
-            echo '<div class=" product_added_field "> <p><input type="checkbox"> Add discount value  .</p>';
+           
             woocommerce_wp_text_input(
                 array(
                     'id'            => 'woocom_text_field_title',
@@ -61,100 +70,82 @@ class Recipe_productpage
                      'required'  => true,
                      'woocom_attributes' => array(
                      'step' => 'any',
-                     'min' => '0'
+                     'min' => '0',
+                     'max'=>'100'
                           )
                     )
                 );
-            echo '</div>';
-        }
+
+
+
+             global $post;
+            woocommerce_wp_checkbox(array(
+                'id'            => 'checkbox_discount',
+                'label'         => __('Add discount value', 'woocommerce' ),
+                'description'   => __( '', 'woocommerce' ),
+                
+            ));
+          
+    }
    
 
-         //saving valus
-    public function woofiled_save_woocom_field( $post_id )
-        {
-            $product = wc_get_product( $post_id );
-            $title = isset( $_POST['woocom_text_field_title'] ) ? $_POST['woocom_text_field_title'] : '';
-             //Sanitizes a string from user input or from the database
-            $product->update_meta_data( 'woocom_text_field_title', sanitize_text_field( $title ) );
-            $product->save();
-        }
-         
-       
- 
-       
-        //showing disocunt in cart and checkout
-    public function showing_discount_cart() 
-        {
-              global $woocommerce;
-           foreach ( $woocommerce->cart->get_cart() as $cw_cart_key => $values) {
-               $_product = $values['data'];
-               if ( $_product->is_on_sale() ) {
-                    $regular_price = $_product->get_regular_price();
-                    $sale_price = $_product->get_sale_price();
-                    $discount =  $regular_price * ((100 - $sale_price)/ 100) ;
-                 
-                }
-           }
-           if ( $discount > 0 ) {
-                echo '<tr class="cart-discount">
-            <th>'. __( 'save', 'woocommerce' ) .'</th>
-            <td data-title=" '. __( 'save', 'woocommerce' ) .' ">'
-                    . wc_price( $discount + $woocommerce->cart->discount_cart ) .'</td>
-            </tr>';
-            }
-            
-        }
-   
-       
-        //showing discount on single page
+        /**
+    * Showing discount on single page
+    */
     public function showing_discount_singleproduct($price)
-        {
+    {
  
-          global $product;
-                 
-            //$product = wc_get_product( $post->ID );
-              $regular_price  = get_post_meta( $product->get_id(), '_regular_price', true );
-              // $sale_price     = get_post_meta( $product->get_id(), '_sale_price', true );
-              $discount_price = get_post_meta( $product->get_id(), 'woocom_text_field_title',true);//this is my 
-
-                 //if( !empty($sale_price) ) {
-               $new_price = $regular_price * ((100 - $discount_price)/ 100) ;
-
-               $price= $new_price;
-               ?>
-
-              <p style="font-size:24px;color:red;"><b>You Save: <?php echo number_format($price,0, '', ''); ?></b></p>  
-              <?php  
+          global $post;
+          $product_id = $post->ID;
+          $checbox_value = get_post_meta( $product_id, 'checkbox_discount', true );
+          if($checbox_value=="yes"){  
+            $product = wc_get_product( $product_id );
+            $discount_price = get_post_meta( $product_id, 'woocom_text_field_title', true );
+            $regular_price = $product->get_regular_price();
+            $price = $regular_price * ((100 - $discount_price)/ 100) ;
+            $price = $this->Apply_discount($product_id);
+          
+          }
+             $new=$price;
+          ?>
+          <p style="font-size:18px;color:red;"><b>You Save: <?php echo ($price); ?></b></p>  
+             
 
                       
-
+          <?php
                            
                 
-         }
+    }
        
-     //changing cart price
-     public function cart_price_update( $cart_object )
-        {
+    /**
+    * Showing discount on cart page price coloumn
+    */
+    public function cart_price_update( $cart_object )
+    {
 
-            global $product;
-            $cart_items = $cart_object->cart_contents;
-             //$product = wc_get_product( $post_id );
-
-            if ( ! empty( $cart_items ) ) 
-            {
-              $price = 105;
-            foreach ( $cart_items as $key => $value )
-            {
-                $value['data']->set_price( $price );
-              }
-            }
+      if($cart_object){
+        foreach ( $cart_object->get_cart() as $hash => $value ) {
+          $product_id = $value['product_id']; 
+          $discount_checkbox = get_post_meta( $product_id, 'checkbox_discount', true );
+          if(!$discount_checkbox == null){  
+            $new_price = $this->Apply_discount($product_id);
+            $value[ 'data' ]->set_price( $new_price);
+          }
         }
-    
+      }
+    }
 
-                   
-                 
+      /**
+    * This is the function for getting discount  
+    */
+     public function Apply_discount($product_id)
+     {
+        $product = wc_get_product( $product_id );
+        $discount_price = get_post_meta( $product_id, 'woocom_text_field_title', true );
+        $regular_price = $product->get_regular_price();
+        $new_price = $regular_price * ((100 - $discount_price)/ 100) ;
+        return $new_price;
+      }  
 
 }
-
-
 new Recipe_productpage();

@@ -1,11 +1,15 @@
-jQuery(document).ready(function($){
-    //alert('hi');
-    $('input[type="checkbox"]').click(function(){
-    if($(this).prop("checked") == true){
-        $('#woocom_text_field_title').show();  
-    }
-    else if($(this).prop("checked") == false){
-        $('#woocom_text_field_title').hide();
-    }
+jQuery(document).ready(function($){ 
+    
+    $('#woocom_text_field_title').parent().hide();
+        if( $('#checkbox_discount').prop("checked") == true){
+            $('#woocom_text_field_title').parent().show();   
+        }
+    $('#checkbox_discount').click(function(){
+        
+        $('#woocom_text_field_title').parent().hide();
+        if( $(this).prop("checked") == true){
+            $('#woocom_text_field_title').parent().show();   
+        }
+
     });
-})
+});

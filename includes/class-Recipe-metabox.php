@@ -19,8 +19,11 @@ class Recipe_metabox
        
     {    //adding meta box
         add_action("add_meta_boxes", array($this, "cfp_metabox_cpt_recipes"));
+        //saving values of meta
         add_action("save_post", array($this, "cfp_metabox_cpt_recipes_value_save"),10,2);
+        //adding coloumn fields to page
         add_action( "manage_recipe_posts_columns",array($this,"adding_coloumns"));
+        //adding data to coloumn
         add_action( "manage_recipe_posts_custom_column",array($this,"adding_coloumns_data"),10,2);
     }
     /**

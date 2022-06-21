@@ -18,7 +18,7 @@ if (! defined('ABSPATH')) {
 	die;
 }
 
-if(! class_exists('Recipe_custom_post_type')){
+if(! class_exists('Recipe_post_type')){
 	
 }
 
