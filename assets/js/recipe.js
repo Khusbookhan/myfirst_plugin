@@ -1,3 +1,7 @@
+
+/**
+* this is the function that on serchbox getting all search post
+*/
 jQuery(document).ready(function($){
 
     $("#keyword").on("keyup",function(){
@@ -20,8 +24,11 @@ jQuery(document).ready(function($){
     
     
       
-    
     });
+
+    /**
+    * function for drop down on option selected to sort posts
+    */
     
     $("#selection").change(function(){
         var keyword = $(this).find("option:selected").text();
@@ -39,8 +46,5 @@ jQuery(document).ready(function($){
             }
         });
     });
-    
-      
-    
-    
-  });
+       
+});

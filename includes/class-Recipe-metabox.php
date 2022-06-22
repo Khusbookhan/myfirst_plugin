@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 exit;
 }
 /**
-* This is the class .
+* This is the class for mataboxes adding ,saving values and getting from database .
 */
 class Recipe_metabox
 {
@@ -24,7 +24,7 @@ class Recipe_metabox
         //adding coloumn fields to page
         add_action( "manage_recipe_posts_columns",array($this,"adding_coloumns"));
         //adding data to coloumn
-        add_action( "manage_recipe_posts_custom_column",array($this,"adding_coloumns_data"),10,2);
+        add_action( "manage_recipe_posts _column",array($this,"adding_coloumns_data"),10,2);
     }
     /**
     *  adding meta box for cpt
@@ -62,7 +62,7 @@ class Recipe_metabox
         wp_die($output_string);    
     }
     /**
-    *  Getting data from custom field
+    *  Getting data from  field
     */
     public function cfp_metabox_cpt_recipes_value_save($post_id, $post)
     {
@@ -126,5 +126,4 @@ class Recipe_metabox
 }
 
 
-   new Recipe_metabox();
-?>
+new Recipe_metabox();

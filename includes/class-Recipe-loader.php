@@ -9,6 +9,9 @@ if (! defined('ABSPATH')) {
 die;
 }
 
+/**
+  * This is the class for accessing other files in pluin folder  
+  */
 class Recipe_Loader
 {
 /**
@@ -16,11 +19,11 @@ class Recipe_Loader
 */
   public function __construct()
   {
-//here calling includes files
+    //here calling includes files
     $this->includes();
     //enque scrips call function
     add_action('wp_enqueue_scripts',array($this,'mytheme_enqueue_styles'));
-    //admin enque script of custom.js file
+    //admin enque script of checkbox.js file
     add_action('admin_enqueue_scripts',array($this,'enqueue_script_admin'));  
     //
     add_action('wp_ajax_searchbox_ajax_datafeth',array($this ,'searchbox_ajax_datafeth'));
@@ -42,8 +45,10 @@ class Recipe_Loader
        //include_once 'class-Recipe-productpage.php';
 
   }
-/*
-Enque script files */
+
+ /**
+  * This is the function for enqueing scripts
+  */
 
 
   public function mytheme_enqueue_styles()
@@ -55,14 +60,18 @@ Enque script files */
      wp_localize_script('recipe_js',  'front_ajax_object',array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
      wp_enqueue_style( 'child-style', plugin_dir_url( __DIR__ ). '/assets/css/style.css');
   }
-    //admin side enque script
+   /**
+  * This is the function for admin side script to enque  
+  */
   public function enqueue_script_admin()
   {
        
      wp_enqueue_script( 'checkbox_js',  plugin_dir_url( __DIR__ ). '/assets/js/checkbox.js',   array('jquery') , wp_rand() );
    
   }
-//serching post ajax here php function
+/**
+  * This is the function for searchbox ajax getting 
+  */
   public function searchbox_ajax_datafeth()
   {
 

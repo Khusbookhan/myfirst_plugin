@@ -22,19 +22,31 @@ if(! class_exists('Recipe_post_type')){
 	
 }
 
-//include( plugin_dir_path( __FILE__ ) . 'include/Recipe_custom_post_type.php' );
+/**
+* define plugin directory 
+*/
 if ( ! defined( 'myown_PLUGIN_DIR' ) ) {
 	define( 'myown_PLUGIN_DIR', __DIR__ );
 }
+
+/**
+*define for plugin directory file
+*/
 
 if ( ! defined( 'myown_PLUGIN_DIR_URL' ) ) {
 	define( 'myown_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
 }
 
+/**
+* defining for file directory file
+*/
+
 if ( ! defined( 'myown_ABSPATH' ) ) {
 	define( 'myown_ABSPATH', dirname( __FILE__ ) );
 
-//including loader file
+/**
+* including loader file here 
+*/
 
 include_once myown_ABSPATH . '/includes/class-Recipe-loader.php';
 }

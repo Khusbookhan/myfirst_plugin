@@ -1,32 +1,39 @@
 <?php
-// prevent public user to directly access your .php files through URL.
+/**
+  * This is the for preventing direct access 
+  */
 if (! defined('ABSPATH')) {
 die;
 }
    
-    //this is the recipe class
-    class Recipe_cpt{
-        /*
-        *Constructor
-        */
+   /**
+  * This is the recipe cpt class
+  */
+class Recipe_cpt
+{
+    /*
+    *Constructor
+    */
 
-        public function __construct()
-        {
-           
-            //register postype call
-          add_action( 'init',array($this,'registerPostType'));
-            //calling archive function
-          add_filter( 'archive_template',  array( $this, 'recipe_archive_template') ) ;
-            //calling single template function
-          add_filter( 'single_template',  array( $this, 'recipe_single_template') ) ;
-
-
-        }
+    public function __construct()
+    {
        
-        //register posttype function
-        public  function registerPostType()
-        {
-            $labels = array(
+        //register postype call
+      add_action( 'init',array($this,'registerPostType'));
+        //calling archive function
+      add_filter( 'archive_template',  array( $this, 'recipe_archive_template') ) ;
+        //calling single template function
+      add_filter( 'single_template',  array( $this, 'recipe_single_template') ) ;
+
+
+    }
+
+    /**
+    * This is the function for register post types  
+    */
+    public  function registerPostType()
+    {
+        $labels = array(
         'name'               => _x( 'recipes', 'post type general name' ),
         'singular_name'      => _x( 'recipe', 'post type singular name' ),
         'add_new'            => _x( 'Add New', 'recipe' ),
@@ -48,7 +55,9 @@ die;
         'menu_name' => 'recipes'
         );
 
-        // args array
+    /**
+    * This is the $arg array  
+    */
 
         $args = array(
         'labels'        => $labels,
@@ -64,20 +73,24 @@ die;
 
         register_post_type( 'recipe', $args );
 
-        }
-           
-         //this is my archive template
-        public function recipe_archive_template( $archive_template )
-         {
+    }
+       
+    /**
+    * This is the function for archive template
+    */
+    public function recipe_archive_template( $archive_template )
+    {
         if ( is_post_type_archive ( 'recipe' ) ) {
             $archive_template = myown_ABSPATH . '/template/archive-recipe.php';
             }
             return $archive_template;
-         } 
+    } 
 
-        // this is my recipe single template
-        function recipe_single_template($single)
-        {
+    /**
+    * This is the function for single template 
+    */
+    function recipe_single_template($single)
+    {
          global $post;
         /* Checks for single template by post type */
         if ( $post->post_type == 'recipe' ) {
@@ -85,9 +98,9 @@ die;
             return myown_ABSPATH . '/template/single-recipe.php';
         }
         }
-       return $single;
-        }    
+        return $single;
+    }    
 
-    }
+}
 
- new  Recipe_cpt();
+new  Recipe_cpt();

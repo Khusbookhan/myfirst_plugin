@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
     /**
-	* Class .
+	* Class for shorcode of post type recipe .
 	*/
 class Recipe_shortcode 
 {
@@ -19,8 +19,12 @@ class Recipe_shortcode
         
     add_shortcode( 'recipe-list', array($this,'shortcode_recipe_post_type') );  
         
-        //function of shortcde
+        
     }
+
+    /**
+    * this is the function for shortcode post type
+    */
         
     function shortcode_recipe_post_type()
     {
