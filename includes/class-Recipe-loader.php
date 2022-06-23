@@ -2,9 +2,7 @@
 /**
 * @package myown
 *
-*
 */
-
 if (! defined('ABSPATH')) {
 die;
 }
@@ -118,7 +116,9 @@ class Recipe_Loader
     die();
   }
 
-   //sorting post in ajax here php funtion
+   /*
+   *sorting post in ajax here php funtion
+   */
   public function sortingpost_ajax()
 
 

@@ -18,9 +18,9 @@ class Recipe_metabox
     public function __construct()
        
     {    //adding meta box
-        add_action("add_meta_boxes", array($this, "cfp_metabox_cpt_recipes"));
+        add_action("add_meta_boxes", array($this, "Adding_cpt"));
         //saving values of meta
-        add_action("save_post", array($this, "cfp_metabox_cpt_recipes_value_save"),10,2);
+        add_action("save_post", array($this, "metabox_value_saving"),10,2);
         //adding coloumn fields to page
         add_action( "manage_recipe_posts_columns",array($this,"adding_coloumns"));
         //adding data to coloumn
@@ -29,13 +29,14 @@ class Recipe_metabox
     /**
     *  adding meta box for cpt
     */
-    public function cfp_metabox_cpt_recipes()
+    public function Adding_cpt()
     {
         add_meta_box( "cpt-id", "Actores Details", array($this,"wpl_actor_call"),"recipe","side","high");
     }
 
-    //displaying input field on cpt page
-
+    /**
+    *  displaying cpt
+    */
     public function wpl_actor_call($post)
     {
         ob_start();    
@@ -64,7 +65,7 @@ class Recipe_metabox
     /**
     *  Getting data from  field
     */
-    public function cfp_metabox_cpt_recipes_value_save($post_id, $post)
+    public function metabox_value_saving($post_id, $post)
     {
         $TxtActoreName = isset($_POST['TxtActoreName'])?$_POST['TxtActoreName']:"";
         $TxtActoreEmail = isset($_POST['TxtActoreEmail'])?$_POST['TxtActoreEmail']:"";

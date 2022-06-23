@@ -81,7 +81,7 @@ class Recipe_cpt
     public function recipe_archive_template( $archive_template )
     {
         if ( is_post_type_archive ( 'recipe' ) ) {
-            $archive_template = myown_ABSPATH . '/template/archive-recipe.php';
+            $archive_template = wordpress_tasks_ABSPATH . '/template/archive-recipe.php';
             }
             return $archive_template;
     } 
@@ -94,8 +94,8 @@ class Recipe_cpt
          global $post;
         /* Checks for single template by post type */
         if ( $post->post_type == 'recipe' ) {
-        if ( file_exists( myown_ABSPATH . '/template/single-recipe.php' ) ) {
-            return myown_ABSPATH . '/template/single-recipe.php';
+        if ( file_exists( wordpress_tasks_ABSPATH . '/template/single-recipe.php' ) ) {
+            return wordpress_tasks_ABSPATH . '/template/single-recipe.php';
         }
         }
         return $single;

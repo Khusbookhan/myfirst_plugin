@@ -4,7 +4,9 @@ if (! defined('ABSPATH')) {
     die;
 }
 
-
+  /**
+  * this is the class for adding discount field in product page,showing discount on the single page and replacing cart prices of each item with the discount price 
+  */
 class Recipe_productpage
 {
 
@@ -28,6 +30,8 @@ class Recipe_productpage
        
     //showing regular and sale price
     add_action( 'woocommerce_before_calculate_totals', array( $this, 'cart_price_update' ) );
+    //validation 
+    //add_filter( 'woocommerce_add_to_cart_validation', array( $this,  'cfwc_validate_custom_field', 10, 3 ));
      
 
      
@@ -41,23 +45,36 @@ class Recipe_productpage
   {
     $discount = isset( $_POST['woocom_text_field_title'] ) ? $_POST['woocom_text_field_title'] : '';
     $checkbox = isset( $_POST['checkbox_discount'] ) ? $_POST['checkbox_discount'] : '';
-    if( $discount ) {
-      if( $discount > 0 && $discount < 100) {
-        update_post_meta( $post_id, "woocom_text_field_title", $discount  );
+    if ($_POST['checkbox_discount'] == true){
+     
+        update_post_meta( $post_id, "woocom_text_field_title", $discount );
         update_post_meta( $post_id, "checkbox_discount", $checkbox  );
       }
-    }
-        
-  }
-    
 
+      if($_POST['checkbox_discount'] ==false){
      
-       /**
+        update_post_meta( $post_id, "", $discount );
+        update_post_meta( $post_id, "", $checkbox );
+      }
+  }
+        
+    
+  /**
   * Adding checkbox and field
   */
 
   public function Adding_checkbox_and_field ()
   {
+
+    global $post;
+    woocommerce_wp_checkbox(array(
+        'id'            => 'checkbox_discount',
+        'label'         => __('Add discount value', 'woocommerce' ),
+        'description'   => __( '', 'woocommerce' ),
+        
+        
+    ));
+
     global $woocommerce;
    
     woocommerce_wp_text_input
@@ -68,24 +85,17 @@ class Recipe_productpage
             'label'         => __( '', 'woofiled' ),
             'desc_tip'      => 'true',
              'type'         => 'number',
-             'required'     => true,
-             'woocom_attributes' => array(
+             'custom_attributes' => array(
              'step'         => 'any',
              'min'          => '0',
-             'max'          =>'100'
+             'max'          =>'100',
+             
+
                   )
             )
     );
 
-
-
-    global $post;
-    woocommerce_wp_checkbox(array(
-        'id'            => 'checkbox_discount',
-        'label'         => __('Add discount value', 'woocommerce' ),
-        'description'   => __( '', 'woocommerce' ),
-        
-    ));
+    
   
   }
  
@@ -142,7 +152,20 @@ class Recipe_productpage
       $regular_price = $product->get_regular_price();
       $new_price = $regular_price * ((100 - $discount_price)/ 100) ;
       return $new_price;
-  }  
+  } 
+
+  // /**
+  // *validating fields
+  // */
+  // public function cfwc_validate_custom_field( $passed, $product_id, $quantity )
+  //  {
+  //  if( empty( $_POST['woocom_text_field_titl'] ) ) {
+  //  // Fails validation
+  //  $passed = false;
+  //  wc_add_notice( __( 'Please enter a value into the text field' ), 'error' );
+  //  }
+  //  return $passed; 
+  //  }
 
 }
 new Recipe_productpage();
